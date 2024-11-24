@@ -11,6 +11,16 @@
         padding: 0;
     }
 
+    /* Bandeau supérieur */
+        header {
+            background-color: #C25100;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    
     /* Card Style */
     .card {
         border: none;
@@ -90,63 +100,68 @@
     }
 </style>
 
-
-<!-- Section des équipements et personnages -->
-<div class="container py-4">
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4">
-        {% for equipement, characters in characters_by_equip %}
-        <div class="col">
-            <div class="card">
-                <img src="{{ equipement.photo }}" class="card-img-top" alt="Image de {{ equipement.id_equip }}">
-                <div class="card-body">
-                    <h3 class="card-title text-truncate">{{ equipement.id_equip }}</h3>
-                    <p class="card-text">
-                        {% if equipement.id_equip == "Boutique" %}
-                        <strong>Effet:</strong> Remet la jauge de magnésie au maximum.
-                        {% elif equipement.id_equip == "Restaurant" %}
-                        <strong>Effet:</strong> Remet la jauge d'énergie au maximum.
-                        {% elif equipement.id_equip == "Extérieur" %}
-                        <strong>Effet:</strong> Force +1, Technique +1, Énergie aléatoire.
-                        {% else %}
-                        <strong>Force requise:</strong> {{ equipement.force_requise }}<br>
-                        <strong>Technique requise:</strong> {{ equipement.technique_requise }}
-                        {% endif %}
-                    </p>
-                </div>
-                <div class="card-footer">
-                    <h4 class="text-center" style="color: #C25100;">Personnages présents :</h4>
-                    <div class="row row-cols-2 g-2">
-                        {% if characters.exists %}
-                        {% for character in characters %}
-                        <div class="col text-center">
-                            <a href="{% url 'accueil_detail' pk=character.id_character %}" class="text-decoration-none">
-                                <img src="{{ character.photo }}" alt="{{ character.id_character }}"
-                                    class="img-fluid rounded-circle mb-2" style="max-width: 80px; height: 80px;">
-                                <p class="mb-1">{{ character.id_character }}</p>
-                            </a>
-                            <div>
-
-                                <strong style="color: #777;">Énergie: {{ character.energie }}/10</strong>
-                                <progress id="énergie" max="10" value={{character.energie}}></progress>
-                                <strong style="color: #777;">Magnésie: {{ character.magnesie }}/10</strong>
-                                <progress id="magnésie" max="10" value={{character.magnesie}}></progress>
-                                <strong style="color: #777;">Force: {{ character.force }}/10</strong>
-                                <progress id="force" max="10" value={{character.force}}></progress>
-                                <strong style="color: #777;">Technique: {{ character.technique }}/10</strong>
-                                <progress id="technique" max="10" value={{character.technique}}></progress>
+<body>
+    <!-- Bandeau supérieur -->
+    <header>
+        Salle d'escalade interactive
+    </header>
+    <!-- Section des équipements et personnages -->
+    <div class="container py-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4">
+            {% for equipement, characters in characters_by_equip %}
+            <div class="col">
+                <div class="card">
+                    <img src="{{ equipement.photo }}" class="card-img-top" alt="Image de {{ equipement.id_equip }}">
+                    <div class="card-body">
+                        <h3 class="card-title text-truncate">{{ equipement.id_equip }}</h3>
+                        <p class="card-text">
+                            {% if equipement.id_equip == "Boutique" %}
+                            <strong>Effet:</strong> Remet la jauge de magnésie au maximum.
+                            {% elif equipement.id_equip == "Restaurant" %}
+                            <strong>Effet:</strong> Remet la jauge d'énergie au maximum.
+                            {% elif equipement.id_equip == "Extérieur" %}
+                            <strong>Effet:</strong> Force +1, Technique +1, Énergie aléatoire.
+                            {% else %}
+                            <strong>Force requise:</strong> {{ equipement.force_requise }}<br>
+                            <strong>Technique requise:</strong> {{ equipement.technique_requise }}
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <h4 class="text-center" style="color: #C25100;">Personnages présents :</h4>
+                        <div class="row row-cols-2 g-2">
+                            {% if characters.exists %}
+                            {% for character in characters %}
+                            <div class="col text-center">
+                                <a href="{% url 'accueil_detail' pk=character.id_character %}" class="text-decoration-none">
+                                    <img src="{{ character.photo }}" alt="{{ character.id_character }}"
+                                        class="img-fluid rounded-circle mb-2" style="max-width: 80px; height: 80px;">
+                                    <p class="mb-1">{{ character.id_character }}</p>
+                                </a>
+                                <div>
+    
+                                    <strong style="color: #777;">Énergie: {{ character.energie }}/10</strong>
+                                    <progress id="énergie" max="10" value={{character.energie}}></progress>
+                                    <strong style="color: #777;">Magnésie: {{ character.magnesie }}/10</strong>
+                                    <progress id="magnésie" max="10" value={{character.magnesie}}></progress>
+                                    <strong style="color: #777;">Force: {{ character.force }}/10</strong>
+                                    <progress id="force" max="10" value={{character.force}}></progress>
+                                    <strong style="color: #777;">Technique: {{ character.technique }}/10</strong>
+                                    <progress id="technique" max="10" value={{character.technique}}></progress>
+                                </div>
                             </div>
+                            {% endfor %}
+                            {% else %}
+                            <div class="col-12 text-center">
+                                <p>Il n'y a personne ici.</p>
+                            </div>
+                            {% endif %}
                         </div>
-                        {% endfor %}
-                        {% else %}
-                        <div class="col-12 text-center">
-                            <p>Il n'y a personne ici.</p>
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
+</body>
 {% endblock %}
