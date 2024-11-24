@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Immersive</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Bandeau supérieur */
+        header {
+            background-color: #C25100;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        h1 {
+            margin: 40px 0 20px;
+            text-align: center;
+            font-size: 2rem;
+            color: #C25100;
+        }
+
+        h2,
+        h3 {
+            margin: 10px 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #C25100;
+        }
+
+        .progress-bar {
+            margin-bottom: 10px;
+        }
+
+        .progress-bar progress {
+            width: 100%;
+            height: 15px;
+            border-radius: 5px;
+            appearance: none;
+        }
+
+        .progress-bar progress::-webkit-progress-bar {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .progress-bar progress::-webkit-progress-value {
+            background-color: #C25100;
+            border-radius: 5px;
+        }
+
+        .form-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #C25100;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #a43f00;
+        }
+
+        .alert {
+            margin-top: 20px;
+            color: #C25100;
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        footer button {
+            background-color: #C25100;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Bandeau supérieur -->
+    <header>
+        Salle d'escalade interactive
+    </header>
+
+    <!-- Titre principal centré -->
+    <h1>Vue Immersive : {{ character_suivi.id_character }}</h1>
+
+    <!-- Section principale en grille -->
+    <div class="container">
+        <!-- Card Équipement -->
+        <div class="card">
+            <img src="{{ character_suivi.lieu.photo }}" alt="Image de {{ character_suivi.lieu.id_equip }}">
+            <div class="card-body">
+                <h3 class="card-title">{{ character_suivi.lieu.id_equip }}</h3>
+                <p><strong>Force requise :</strong> {{ equipement.force_requise }}</p>
+                <p><strong>Technique requise :</strong> {{ equipement.technique_requise }}</p>
+            </div>
+        </div>
+
+        <!-- Card Personnage -->
+        <div class="card">
+            <img src="{{ character_suivi.photo }}" alt="Image de {{ character_suivi.id_character }}">
+            <div class="card-body">
+                <h3 class="card-title">Personnage Suivi : {{ character_suivi.id_character }}</h3>
+                <div class="progress-bar">
+                    <p>Énergie : {{ character_suivi.energie }}/10</p>
+                    <progress max="10" value="{{ character_suivi.energie }}"></progress>
+                </div>
+                <div class="progress-bar">
+                    <p>Magnésie : {{ character_suivi.magnesie }}/10</p>
+                    <progress max="10" value="{{ character_suivi.magnesie }}"></progress>
+                </div>
+                <div class="progress-bar">
+                    <p>Force : {{ character_suivi.force }}/10</p>
+                    <progress max="10" value="{{ character_suivi.force }}"></progress>
+                </div>
+                <div class="progress-bar">
+                    <p>Technique : {{ character_suivi.technique }}/10</p>
+                    <progress max="10" value="{{ character_suivi.technique }}"></progress>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulaire et Actions -->
+    <div class="form-section">
+        <h2>Choisir le prochain équipement à visiter</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ equip_form.as_ul }}
+            <button type="submit">Valider</button>
+        </form>
+
+        {% if character_suivi.lieu in liste_bloc and character_suivi.magnesie != 0 and character_suivi.energie != 0 %}
+        <form action="{% url 'grimper_bloc' %}" method="get">
+            <button style="background-color: #C25100; color: white;">Grimper</button>
+        </form>
+        {% endif %}
+
+        {% if character_suivi.magnesie == 0 %}
+        <p class="alert">Veuillez vous rendre à la boutique pour recharger votre magnésie !</p>
+        {% endif %}
+
+        {% if character_suivi.energie == 0 %}
+        <p class="alert">Veuillez vous rendre au restaurant pour recharger votre énergie !</p>
+        {% endif %}
+    </div>
+
+    <!-- Retour -->
+    <footer>
+        <form action="{% url 'accueil_site' %}" method="get">
+            <button>Retour à la page d'accueil</button>
+        </form>
+    </footer>
+</body>
+
+</html>

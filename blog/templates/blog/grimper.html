@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salle d'escalade interactive</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            margin-top: 50px;
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        img {
+            margin: 20px auto;
+            max-width: 80%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .message {
+            margin: 20px auto;
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        .message.success {
+            color: green;
+        }
+
+        .message.warning {
+            color: red;
+        }
+
+        .button-container {
+            margin: 30px auto;
+        }
+
+        .button-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .button-container a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Bloc {{ character_suivi.lieu.id_equip }}</h1>
+
+    <!-- Affichage du message de réussite ou d'alerte -->
+    {% if messages %}
+    <div class="message-container">
+        {% for message in messages %}
+        <p class="message {{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Affichage de la photo associée au lieu -->
+    <img src="{{ character_suivi.lieu.photo }}" alt="Photo du lieu {{ character_suivi.lieu.id_equip }}">
+
+
+    <!-- Bouton retour au bloc actuel -->
+    <div class="button-container">
+        <a href="{% url 'vue_immersive' pk=character_suivi.id_character %}">Retour au bloc actuel</a>
+    </div>
+</body>
+
+</html>
